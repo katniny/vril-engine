@@ -61,6 +61,9 @@ void Menu_Lobby_SetStrings (void)
         case 6:
             gamemode = "FEVER";
             break;
+        case 7:
+            gamemode = "LOCKDOWN";
+            break;
         default:
             gamemode = "???";
             break;

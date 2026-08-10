@@ -68,6 +68,10 @@ void Menu_GameSettings_SetStrings (void)
             gamemode_description = "The cycle continues. Old meets new in this Cold War inspired mode!"; 
             gamemode_string = "FEVER"; 
             break;
+        case 7:
+            gamemode_description = "No Escape. Survive as long as possible in the Starting Area.";
+            gamemode_string = "LOCKDOWN";
+            break;
         default: 
             gamemode_description = "???"; 
             break;
@@ -121,7 +125,7 @@ void Menu_GameSettings_ApplyGameMode (void)
     float current_gamemode = sv_gamemode.value;
     current_gamemode += 1;
 
-    if (current_gamemode > 6) {
+    if (current_gamemode > 7) {
         current_gamemode = 0;
     }
 

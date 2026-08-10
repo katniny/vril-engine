@@ -665,6 +665,7 @@ HUD_GetWorldText
 #define GAMEMODE_WILDWEST       4
 #define GAMEMODE_STICKSNSTONES  5
 #define GAMEMODE_FESTIVE		6
+#define GAMEMODE_LOCKDOWN		7
 
 void HUD_GameModeText(int alpha)
 {
@@ -687,6 +688,10 @@ void HUD_GameModeText(int alpha)
 		case GAMEMODE_WILDWEST:
 			mode_title = "WILD WEST";
 			subtitle = "It's a stand-off!";
+			break;
+		case GAMEMODE_LOCKDOWN:
+			mode_title = "LOCKDOWN";
+			subtitle = "";
 			break;
 		default:
 			mode_title = "";
