@@ -23,6 +23,8 @@ endif
 LDLIBS := $(shell $(PKG_CONFIG) --libs sdl2) -lSDL2_mixer -lm
 ifeq ($(shell uname -s),Darwin)
 LDLIBS += -framework OpenGL
+else ifeq ($(findstring MINGW,$(shell uname -s)),MINGW)
+LDLIBS += -lopengl32 -lglu32 -lws2_32
 else
 LDLIBS += -lGL -lGLU
 endif
