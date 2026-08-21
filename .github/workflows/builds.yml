@@ -92,14 +92,14 @@ jobs:
       - name: Install Windows SDL dependencies
         env:
           TRIPLET: ${{ matrix.triplet }}
-          SDL2_VER: 2.32.8
-          SDL2_MIXER_VER: 2.8.1
+          SDL2_VER: 2.32.10
+          SDL2_MIXER_VER: 2.8.2
         run: |
           mkdir -p /opt/mingw-deps
           cd /tmp
 
           # get the latest SDL2 version
-          wget -q https://github.com/libsdl-org/SDL/releases/download/release-${SDL2_VER}-mingw.tar.gz
+          wget -q https://github.com/libsdl-org/SDL/releases/download/release-${SDL2_VER}/SDL2-devel-${SDL2_VER}-mingw.tar.gz
           tar xf SDL2-devel-${SDL2_VER}-mingw.tar.gz
 
           # get the latest SDL2_Mixer version
