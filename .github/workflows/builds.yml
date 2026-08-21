@@ -100,7 +100,7 @@ jobs:
 
           # get the latest SDL2 version
           wget -q https://github.com/libsdl-org/SDL/releases/download/release-${SDL2_VER}/SDL2-devel-${SDL2_VER}-mingw.tar.gz
-          tar xf SDL2-devel-${SDL2_VER}-mingw.tar.gz
+          cp -r SDL2-${SDL2_VER}/${TRIPLET}/* /opt/mingw-deps/
 
           # get the latest SDL2_Mixer version
           wget -q https://github.com/libsdl-org/SDL_mixer/releases/download/release-${SDL2_MIXER_VER}/SDL2_mixer-devel-${SDL2_MIXER_VER}-mingw.tar.gz
