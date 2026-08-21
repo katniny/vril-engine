@@ -71,10 +71,8 @@ jobs:
         include:
           - arch: x86
             triplet: i686-w64-mingw32
-            compiler: gcc-mingw-w64-i686
           - arch: x86_64
             triplet: x86_64-w64-mingw32
-            compiler: gcc-mingw-w64-x86-64
     container:
       image: debian:12
     steps:
@@ -88,13 +86,34 @@ jobs:
             git \
             pkg-config \
             mingw-w64-tools \
-            "${COMPILER}"
+            wget \
+            tar \
+            "${{ matrix.arch == 'x86' && 'gcc-mingw-w64-i686' || 'gcc-mingw-w64-x86-64' }}"
+      - name: Install Windows SDL dependencies
+        env:
+          TRIPLET: ${{ matrix.triplet }}
+          SDL2_VER: 2.32.8
+          SDL2_MIXER_VER: 2.8.1
+        run: |
+          mkdir -p /opt/mingw-deps
+          cd /tmp
+
+          # get the latest SDL2 version
+          wget -q https://github.com/libsdl-org/SDL/releases/download/release-${SDL2_VER}-mingw.tar.gz
+          tar xf SDL2-devel-${SDL2_VER}-mingw.tar.gz
+
+          # get the latest SDL2_Mixer version
+          wget -q https://github.com/libsdl-org/SDL_mixer/releases/download/release-${SDL2_MIXER_VER}/SDL2_mixer-devel-${SDL2_MIXER_VER}-mingw.tar.gz
+          tar xf SDL2_mixer-devel-${SDL2_MIXER_VER}-mingw.tar.gz
+          cp -r SDL2_mixer-${SDL2_MIXER_VER}/${TRIPLET}/* /opt/mingw-deps/
       - name: Checkout
         uses: actions/checkout@v4
       - name: Build
         env:
           ARCH: ${{ matrix.arch }}
           TRIPLET: ${{ matrix.triplet }}
+          PKG_CONFIG_PATH: /opt/mingw-deps/lib/pkgconfig
+          PKG_CONFIG_LIBDIR: /opt/mingw-deps/lib/pkgconfig
         run: |
           git config --global --add safe.directory "${GITHUB_WORKSPACE}"
           make -f Makefile.sdl -j$(nproc) \
