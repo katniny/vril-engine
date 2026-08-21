@@ -61,6 +61,51 @@ jobs:
         with:
           name: linux-${{ matrix.arch }}-nzp-sdl
           path: ./build/sdl/${{ matrix.arch }}/nzportable
+  Compile-Windows:
+    if: ${{ github.ref == 'refs/heads/main' 
+    #|| github.event_name == 'pull_request' }} # TODO: re-add once builds work
+    name: Compile Windows (${{ matrix.arch }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86
+            triplet: i686-w64-mingw32
+            compiler: gcc-mingw-w64-i686
+          - arch: x86_64
+            triplet: x86_64-w64-mingw32
+            compiler: gcc-mingw-w64-x86-64
+    container:
+      image: debian:12
+    steps:
+      - name: Install cross toolchain
+        env:
+          COMPILER: ${{ matrix.compiler }}
+        run: |
+          apt-get update
+          apt-get install -y \
+            make \
+            git \
+            pkg-config \
+            mingw-w64-tools \
+            "${COMPILER}"
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build
+        env:
+          ARCH: ${{ matrix.arch }}
+          TRIPLET: ${{ matrix.triplet }}
+        run: |
+          git config --global --add safe.directory "${GITHUB_WORKSPACE}"
+          make -f Makefile.sdl -j$(nproc) \
+            CROSS_COMPILE="${TRIPLET}-"
+        # WERROR=1 TODO: add once builds have no more warnings
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-${{ matrix.arch }}-nzp-sdl
+          path: ./build/sdl/${{ matrix.arch }}/nzportable.exe
   Compile-EBOOT:
     if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
