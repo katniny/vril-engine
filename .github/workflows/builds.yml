@@ -130,7 +130,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows-${{ matrix.arch }}-nzp-sdl
-          path: ./build/sdl/${{ matrix.arch }}/nzportable.exe
+          path: ./build/sdl/nzportable.exe
   Compile-EBOOT:
     if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
