@@ -429,9 +429,9 @@ jobs:
             echo ""
           } >> "${GITHUB_STEP_SUMMARY}"
   Unify-and-Release:
-    if: github.ref == 'refs/heads/main'
+    #if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    needs: [Compile-Linux, Compile-EBOOT, Compile-3DSX, Compile-TNS, Compile-VPK, Compile-NRO]
+    needs: [Compile-Linux, Compile-Windows, Compile-EBOOT, Compile-3DSX, Compile-TNS, Compile-VPK, Compile-NRO]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -453,6 +453,8 @@ jobs:
           zip -r -j linux-x86_64-nzp-sdl.zip linux-x86_64-nzp-sdl/*
           zip -r -j linux-arm64-nzp-sdl.zip linux-arm64-nzp-sdl/*
           zip -r -j linux-armhf-nzp-sdl.zip linux-armhf-nzp-sdl/*
+          zip -r -j windows-x86-nzp-sdl.zip windows-x86-nzp-sdl/*
+          zip -r -j windows-x86_64-nzp-sdl.zip windows-x86_64-nzp-sdl/*
       - name: Generate Build Date
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d-%H-%M-%S')"
@@ -480,7 +482,7 @@ jobs:
             - PS VITA: Install `nzportable.vpk` using VitaShell.
             - 3DS: Extract `nzportable.3dsx` to `/3ds/nzportable/`.
             - NSPIRE: Sync `nzportable.tns` to `/`.
-            - Linux: Extract the archive for your CPU architecture and run `nzportable`.
+            - PC: Extract the archive for your CPU architecture and run `nzportable`.
           draft: true
           prerelease: false
       - name: Upload PSP Archive
