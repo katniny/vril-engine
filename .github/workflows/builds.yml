@@ -126,11 +126,16 @@ jobs:
             BUILD="build/sdl/${ARCH}" \
             TARGET="build/sdl/${ARCH}/nzportable.exe"
         # WERROR=1 TODO: add once builds have no more warnings
+      - name: Add DLLs to distributables
+        run: |
+          mkdir -p dist
+          cp build/sdl/nzportable.exe dist/
+          cp /opt/mingw-deps/bin/*.dll dist/
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: windows-${{ matrix.arch }}-nzp-sdl
-          path: ./build/sdl/nzportable.exe
+          path: dist/
   Compile-EBOOT:
     if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
