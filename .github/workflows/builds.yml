@@ -62,7 +62,7 @@ jobs:
           name: linux-${{ matrix.arch }}-nzp-sdl
           path: ./build/sdl/${{ matrix.arch }}/nzportable
   Compile-Windows:
-    if: ${{ github.ref == 'refs/heads/main' 
+    if: ${{ github.ref == 'refs/heads/main' }}
     #|| github.event_name == 'pull_request' }} # TODO: re-add once builds work
     name: Compile Windows (${{ matrix.arch }})
     runs-on: ubuntu-latest
