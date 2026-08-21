@@ -107,6 +107,10 @@ jobs:
           wget -q https://github.com/libsdl-org/SDL_mixer/releases/download/release-${SDL2_MIXER_VER}/SDL2_mixer-devel-${SDL2_MIXER_VER}-mingw.tar.gz
           tar xf SDL2_mixer-devel-${SDL2_MIXER_VER}-mingw.tar.gz
           cp -r SDL2_mixer-${SDL2_MIXER_VER}/${TRIPLET}/* /opt/mingw-deps/
+
+          # the upstream .pc files hardcode an absolute value build-server path..
+          # we have to rewrite it to our actual extraction location
+          sed -i "s|^prefix=.*|prefix=/opt/mingw-deps|" /opt/mingw-deps/lib/pkgconfig/*.pc
       - name: Checkout
         uses: actions/checkout@v4
       - name: Build
