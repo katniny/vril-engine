@@ -424,7 +424,7 @@ jobs:
       - name: Run All
         run: |
           cd ./testing
-          ./run_tests.sh --platform windows --test all --content "$(pwd)/validate" --working-dir working/ --binary "$(pwd)/working/windows-artifact/nzportable"
+          ./run_tests.sh --platform windows --test all --content "$(pwd)/validate" --working-dir working/ --binary "$(pwd)/working/windows-artifact/nzportable.exe"
       - name: Upload Failure Artifact
         id: windows_failure_artifact
         if: failure()

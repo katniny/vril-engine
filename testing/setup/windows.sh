@@ -4,7 +4,7 @@ set -o errexit
 
 source "nzp_utility.sh"
 
-APP_BIN="nzportable"
+APP_BIN="nzportable.exe"
 TIMEOUT=180
 
 testing_dir_path="${testing_dir_path:-}"
@@ -52,7 +52,7 @@ function begin_setup()
 
 function run_nzportable()
 {
-	echo "env --chdir=${working_dir}/nzportable SDL_AUDIODRIVER=dummy LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a timeout ${TIMEOUT} wine ./${APP_BIN}.exe -basedir ${working_dir}/nzportable -condebug -nosound -nocdaudio"
+	echo "env --chdir=${working_dir}/nzportable SDL_AUDIODRIVER=dummy LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a timeout ${TIMEOUT} wine ./${APP_BIN} -basedir ${working_dir}/nzportable -condebug -nosound -nocdaudio"
 }
 
 function capture_path()
