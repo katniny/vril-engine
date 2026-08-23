@@ -384,7 +384,7 @@ jobs:
             echo ""
           } >> "${GITHUB_STEP_SUMMARY}"
   Pull-Request-Test-Windows:
-    if: github.event_name == 'pull_request'
+    #if: github.event_name == 'pull_request'
     name: Windows ${{ matrix.arch }} Pull Request Tests
     strategy:
       fail-fast: false
