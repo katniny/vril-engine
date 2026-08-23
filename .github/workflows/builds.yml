@@ -2,7 +2,7 @@ name: Build
 on: [push, pull_request]
 jobs:
   Compile-Linux:
-    if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
+    #if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
     name: Compile Linux (${{ matrix.arch }})
     runs-on: ubuntu-latest
     strategy:
@@ -62,7 +62,7 @@ jobs:
           name: linux-${{ matrix.arch }}-nzp-sdl
           path: ./build/sdl/${{ matrix.arch }}/nzportable
   Compile-Windows:
-    if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
+    #if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
     name: Compile Windows (${{ matrix.arch }})
     runs-on: ubuntu-latest
     strategy:
@@ -121,11 +121,10 @@ jobs:
           PKG_CONFIG_LIBDIR: /opt/mingw-deps/lib/pkgconfig
         run: |
           git config --global --add safe.directory "${GITHUB_WORKSPACE}"
-          make -f Makefile.sdl -j$(nproc) \
+          make -f Makefile.sdl WERROR=1 -j$(nproc) \
             CROSS_COMPILE="${TRIPLET}-"
             BUILD="build/sdl/${ARCH}" \
             TARGET="build/sdl/${ARCH}/nzportable.exe"
-        # WERROR=1 TODO: add once builds have no more warnings
       - name: Add DLLs to distributables
         run: |
           mkdir -p dist
@@ -137,7 +136,7 @@ jobs:
           name: windows-${{ matrix.arch }}-nzp-sdl
           path: dist/
   Compile-EBOOT:
-    if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
+    #if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     container:
       image: pspdev/pspdev
@@ -158,7 +157,7 @@ jobs:
           name: psp-nzp-eboot
           path: ./build/psp/bin/EBOOT.PBP
   Compile-3DSX:
-    if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
+    #if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     outputs:
       o3ds_link: ${{ steps.zip.outputs.zip }}
@@ -200,7 +199,7 @@ jobs:
           name: ctr-nzp-3dsx
           path: ./build/3ds/bin/nzportable.3dsx
   Compile-TNS:
-    if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
+    #if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     container:
       image: bensuperpc/ndless:latest
@@ -218,7 +217,7 @@ jobs:
           name: nspire-nzp-tns
           path: ./build/nspire/bin/nzportable.tns
   Compile-VPK:
-    if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
+    #if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     container:
       image: vitasdk/vitasdk
@@ -245,7 +244,7 @@ jobs:
           name: psp2-nzp-vpk
           path: ./build/psp2/nzportable.vpk
   Compile-NRO:
-      if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
+      #if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
       runs-on: ubuntu-latest
       container:
         image: devkitpro/devkita64
@@ -429,7 +428,7 @@ jobs:
             echo ""
           } >> "${GITHUB_STEP_SUMMARY}"
   Unify-and-Release:
-    if: github.ref == 'refs/heads/main'
+    #if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: [Compile-Linux, Compile-Windows, Compile-EBOOT, Compile-3DSX, Compile-TNS, Compile-VPK, Compile-NRO]
     steps:
