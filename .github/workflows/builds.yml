@@ -383,6 +383,70 @@ jobs:
             echo "[Failure Artifact](${ARTIFACT_URL})"
             echo ""
           } >> "${GITHUB_STEP_SUMMARY}"
+  Pull-Request-Test-Windows:
+    if: github.event_name == 'pull_request'
+    name: Windows ${{ matrix.arch }} Pull Request Tests
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86
+            runner: ubuntu-24.04
+            native_arch: amd64
+            deb_arch: i386
+          - arch: x86_64
+            runner: ubuntu-24.04
+            native_arch: amd64
+            deb_arch: amd64
+    runs-on: ${{ matrix.runner }}
+    container:
+      image: debian:12
+      options: --shm-size=8192m
+    needs: [Compile-Windows]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Download Windows Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-${{ matrix.arch }}-nzp-sdl
+          path: testing/working/windows-artifact
+      - name: Install compatibility libraries
+        if: matrix.deb_arch != matrix.native_arch
+        env:
+          DEB_ARCH: ${{ matrix.deb_arch }}
+        run: |
+          dpkg --add-architecture "${DEB_ARCH}"
+          apt-get update
+          apt-get install -y \
+            "libgl1:${DEB_ARCH}" "libgl1-mesa-dri:${DEB_ARCH}" "libglu1-mesa:${DEB_ARCH}" \
+            "libsdl2-2.0-0:${DEB_ARCH}" "libsdl2-mixer-2.0-0:${DEB_ARCH}"
+      - name: Run All
+        run: |
+          cd ./testing
+          ./run_tests.sh --platform windows --test all --content "$(pwd)/validate" --working-dir working/ --binary "$(pwd)/working/windows-artifact/nzportable"
+      - name: Upload Failure Artifact
+        id: windows_failure_artifact
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-${{ matrix.arch }}-pr-failures
+          path: testing/working/fail/
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Add Failure Summary
+        if: failure() && steps.windows_failure_artifact.outputs.artifact-url != ''
+        env:
+          ARTIFACT_URL: ${{ steps.windows_failure_artifact.outputs.artifact-url }}
+        run: |
+          {
+            echo "## Windows ${{ matrix.arch }} PR Test Failed"
+            echo ""
+            cat testing/working/fail/summary.md
+            echo ""
+            echo "[Failure Artifact](${ARTIFACT_URL})"
+            echo ""
+          } >> "${GITHUB_STEP_SUMMARY}"
   Pull-Request-Test-PSP2000:
     if: github.event_name == 'pull_request'
     name: PSP-2000 Pull Request Tests
