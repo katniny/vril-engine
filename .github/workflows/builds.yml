@@ -421,6 +421,18 @@ jobs:
           apt-get install -y \
             "libgl1:${DEB_ARCH}" "libgl1-mesa-dri:${DEB_ARCH}" "libglu1-mesa:${DEB_ARCH}" \
             "libsdl2-2.0-0:${DEB_ARCH}" "libsdl2-mixer-2.0-0:${DEB_ARCH}"
+      - name: Inspect test content
+        run: |
+          echo "=== validation tree ==="
+          find testing/validate -maxdepth 2 -type f | sort
+
+          echo ""
+          echo "=== windows validation ==="
+          ls -lah testing/validate/windows/ || true
+
+          echo ""
+          echo "=== 4all ==="
+          ls -lah testing/validate/windows/4all.bmp || true
       - name: Run All
         run: |
           cd ./testing
