@@ -266,20 +266,20 @@ typedef struct
 #include "images.h"
 #include "cvar.h"
 
-#include PLATFORM_FILE(screen.h)
+#include "screen.h"
 #include PLATFORM_FILE(net.h)
 
 #include "protocol.h"
 #include "cmd.h"
-#include "test_handler.h"
+#include "tests/test_handler.h"
 
 #include PLATFORM_FILE(render.h)
-#include PLATFORM_FILE(client.h)
+#include "client.h"
 
-#include "cl_hud.h"
+#include "render/r_hud.h"
 #include "sound.h"
 
-#include "progs.h"
+#include "qcvm/progs.h"
 #include "server.h"
 
 #include RENDERER_FILE(model.h)
@@ -302,9 +302,9 @@ typedef struct
 #include "snd_music.h"
 #include PLATFORM_FILE(music.h)
 
-#include RENDERER_FILE(main.h)
-
 #include "render/r_main.h"
+
+#include RENDERER_FILE(main.h)
 
 //=============================================================================
 

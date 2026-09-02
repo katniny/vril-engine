@@ -18,7 +18,10 @@ LIBS = -lvitaGL -lvitashark -lSceShaccCgExt -ltaihen_stub -lvorbisfile -lvorbis 
 
 COMMON_OBJS =	\
 	source/system.o \
-	source/test_handler.o \
+	source/tests/test_handler.o \
+	source/tests/test_map_boot.o \
+	source/tests/test_restart.o \
+	source/tests/test_qcvm.o \
 	source/chase.o \
 	source/cl_demo.o \
 	source/cl_input.o \
@@ -58,13 +61,13 @@ COMMON_OBJS =	\
 	source/net_loop.o \
 	source/platform/psp2/net_main.o \
 	source/net_vcr.o \
-	source/pr_cmds.o \
-	source/pr_edict.o \
-	source/pr_exec.o \
+	source/qcvm/pr_cmds.o \
+	source/qcvm/pr_edict.o \
+	source/qcvm/pr_exec.o \
 	source/snd_dma.o \
 	source/snd_mem.o \
 	source/snd_mix.o \
-	source/cl_hud.o \
+	source/render/r_hud.o \
 	source/sv_main.o \
 	source/sv_move.o \
 	source/sv_phys.o \
@@ -78,11 +81,11 @@ COMMON_OBJS =	\
 	source/render/r_entity_fragments.o \
 	source/render/r_color_quantization.o \
 	source/render/r_light.o \
+	source/render/r_particles.o \
+	source/render/r_decals.o \
+	source/platform/psp2/gl/gl_hyena.o \
 	source/images.o \
 	source/platform/psp2/sys_psp2.o \
-	source/platform/psp2/gl/gl_fog.o \
-	source/platform/psp2/gl/gl_decal.o \
-	source/platform/psp2/gl/gl_qmb.o \
 	source/platform/psp2/gl/gl_draw.o \
 	source/platform/psp2/gl/gl_mesh.o \
 	source/platform/psp2/gl/gl_model.o \
@@ -91,7 +94,6 @@ COMMON_OBJS =	\
 	source/platform/psp2/gl/gl_rsurf.o \
 	source/render/r_screen.o \
 	source/platform/psp2/gl/gl_warp.o \
-	source/platform/psp2/r_part.o \
 	source/platform/psp2/music.o \
 	source/snd_music.o \
 	source/platform/psp2/audiodec/audio_decoder.o \

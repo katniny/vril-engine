@@ -27,7 +27,7 @@ GCCFLAGS += $(VRILFLAGS) -O3 -DOLD_SCREEN_API -fomit-frame-pointer -D__NSPIRE__ 
 COMMON_OBJS = 	source/platform/nspire/cd_nspire.c \
 		source/chase.c \
 		source/cl_demo.c \
-		source/cl_hud.c \
+		source/render/r_hud.c \
 		source/cl_input.c \
 		source/cl_main.c \
 		source/cl_parse.c \
@@ -44,7 +44,6 @@ COMMON_OBJS = 	source/platform/nspire/cd_nspire.c \
 		source/platform/nspire/d_fill.c \
 		source/platform/nspire/d_init.c \
 		source/platform/nspire/d_modech.c \
-		source/platform/nspire/d_part.c \
 		source/platform/nspire/d_polyse.c \
 		source/platform/nspire/draw.c \
 		source/platform/nspire/d_scan.c \
@@ -85,9 +84,9 @@ COMMON_OBJS = 	source/platform/nspire/cd_nspire.c \
 		source/platform/nspire/net_main.c \
 		source/platform/nspire/net_nspire.c \
 		source/net_vcr.c \
-		source/pr_cmds.c \
-		source/pr_edict.c \
-		source/pr_exec.c \
+		source/qcvm/pr_cmds.c \
+		source/qcvm/pr_edict.c \
+		source/qcvm/pr_exec.c \
 		source/platform/nspire/r_aclip.c \
 		source/platform/nspire/r_alias.c \
 		source/platform/nspire/r_bsp.c \
@@ -97,7 +96,9 @@ COMMON_OBJS = 	source/platform/nspire/cd_nspire.c \
 		source/platform/nspire/r_light.c \
 		source/platform/nspire/r_main.c \
 		source/platform/nspire/r_misc.c \
-		source/platform/nspire/r_part.c \
+		source/render/r_particles.c \
+		source/render/r_decals.c \
+		source/platform/nspire/r_hyena_soft.c \
 		source/platform/nspire/r_sky.c \
 		source/platform/nspire/r_sprite.c \
 		source/platform/nspire/r_surf.c \
@@ -109,7 +110,10 @@ COMMON_OBJS = 	source/platform/nspire/cd_nspire.c \
 		source/sv_user.c \
 		source/system.c \
 		source/platform/nspire/sys_nspire.c \
-		source/test_handler.c \
+		source/tests/test_handler.c \
+		source/tests/test_map_boot.c \
+		source/tests/test_restart.c \
+		source/tests/test_qcvm.c \
 		source/platform/nspire/vid_nspire.c \
 		source/view.c \
 		source/wad.c \

@@ -32,8 +32,6 @@ void GL_InitTextureUsage ();
 
 qboolean	r_loadq3player = false;
 
-int decal_blood1, decal_blood2, decal_blood3, decal_q3blood, decal_burn, decal_mark, decal_glow;
-
 /*
 ==================
 R_InitOtherTextures
@@ -41,7 +39,6 @@ R_InitOtherTextures
 */
 void	R_InitOtherTextures (void)
 {
-	sniper_scope = Image_LoadImage ("gfx/hud/scope_256", IMAGE_TGA, 0, true, false);
 
 	zombie_skins[0][0] = loadpcxas4bpp("models/ai/zfull.mdl_0", GU_LINEAR);
 	GL_MarkTextureAsPermanent(zombie_skins[0][0]);
@@ -60,10 +57,6 @@ void	R_InitOtherTextures (void)
 		GL_MarkTextureAsPermanent(zombie_skins[1][1]);
 	}
 
-	decal_burn	  = Image_LoadImage ("textures/decals/explo_burn01", IMAGE_TGA, GU_LINEAR, true, false);
-	decal_blood1 = decal_blood2 = decal_blood3 = decal_q3blood = decal_burn;
-	decal_mark	  = Image_LoadImage ("textures/decals/particle_burn01", IMAGE_TGA, GU_LINEAR, true, false);
-	decal_glow	  = Image_LoadImage ("textures/decals/glow2", IMAGE_TGA, GU_LINEAR, true, false);
 }
 
 /*
@@ -259,9 +252,11 @@ void R_Envmap_f (void)
 R_Init
 ===============
 */
-void R_InitDecals (void);
+extern "C"
+{
 void R_ToggleDecals_f (void);
 void R_ToggleParticles_f (void);
+}
 
 model_t* Mod_FindName(char* name);
 
@@ -347,12 +342,9 @@ void R_Init (void)
 	//Shpuld
 	Cvar_RegisterVariable (&r_model_brightness);
 
-	Cvar_RegisterVariable (&r_runqmbparticles);
-
 	R_InitParticles ();
 	// R_InitParticleTexture ();
 	R_InitOtherTextures ();
-	R_InitDecals ();
 	Sky_Init (); //johnfitz
 	Fog_Init (); //johnfitz
 
@@ -362,7 +354,6 @@ void R_Init (void)
 	*/
 }
 
-void R_ClearDecals(void);
 /*
 ===============
 R_NewMap
@@ -385,7 +376,6 @@ void R_NewMap (void)
 
 	r_viewleaf = NULL;
 	R_ClearParticles ();
-    R_ClearDecals();
 
 	GL_BuildLightmaps ();
 
@@ -444,4 +434,3 @@ void R_TimeRefresh_f (void)
 
 	GL_EndRendering ();
 }
-

@@ -135,33 +135,11 @@ void Host_Error (char *error, ...)
 {
 	va_list		argptr;
 	char		string[1024];
-	static	qboolean inerror = false;
-
-	if (inerror)
-		Sys_Error ("Host_Error: recursively entered");
-	inerror = true;
-
-	SCR_EndLoadingPlaque ();		// reenable screen updates
 
 	va_start (argptr,error);
-	vsprintf (string,error,argptr);
+	vsnprintf (string, sizeof(string), error, argptr);
 	va_end (argptr);
-	Con_Printf ("Host_Error: %s\n",string);
-
-	if (sv.active)
-		Host_ShutdownServer (false);
-
-	if (cls.state == ca_dedicated)
-		Sys_Error ("Host_Error: %s\n",string);	// dedicated servers exit
-
-	CL_Disconnect ();
-	cls.demonum = -1;
-
-	Clear_LoadingFill ();
-
-	inerror = false;
-
-	longjmp (host_abortserver, 1);
+	Sys_Error ("Host_Error: %s", string);
 }
 
 /*
@@ -404,6 +382,11 @@ void SV_DropClient (qboolean crash)
 	host_client->name[0] = 0;
 	host_client->old_points = -999999;
 	host_client->old_kills = -999999;
+	host_client->old_headshots = -999999;
+	host_client->old_downs = -999999;
+	host_client->old_revives = -999999;
+	host_client->old_ping = -999999;
+	host_client->next_scorestats_update = 0;
 	net_activeconnections--;
 
 // send notification to all clients
@@ -605,10 +588,7 @@ void Host_ServerFrame (void)
 // send all messages to the clients
 	SV_SendClientMessages ();
 
-	if (sv.time >= 5.0) {
-		TestHandler_MapBoot();
-	}
-	TestHandler_RestartStress();
+	TestHandler_Frame();
 }
 
 /*
@@ -881,7 +861,8 @@ void Host_Init (quakeparms_t *parms)
 	Mod_Init ();
 	NET_Init ();
 	SV_Init ();
-	TestHandler_Init ();
+	if (TestHandler_Init ())
+		return;
 
 
 	Sys_PrintSystemInfo();

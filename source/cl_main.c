@@ -55,6 +55,13 @@ cvar_t	in_anub_mode = {"in_anub_mode", "0", true};
 cvar_t 	cl_hitmarkers = {"cl_hitmarkers", "1", true};
 cvar_t 	cl_colorblind = {"cl_colorblind", "0", true};
 cvar_t 	cl_textopacity = {"cl_textopacity", "0.20", true};
+cvar_t 	cl_cinematic = {"cl_cinematic", "0", true};
+cvar_t 	vid_ultrawide_limiter = {"vid_ultrawide_limiter", "0", true};
+cvar_t 	cl_crosshairdot = {"cl_crosshairdot", "0", true};
+cvar_t 	scr_serverstopwatch = {"scr_serverstopwatch", "0", true};
+cvar_t 	scr_playerdebuginfo = {"scr_playerdebuginfo", "0", true};
+cvar_t 	scr_playerdebuginfo_x = {"scr_playerdebuginfo_x", "8", true};
+cvar_t 	scr_playerdebuginfo_y = {"scr_playerdebuginfo_y", "8", true};
 cvar_t 	scr_whiteflash = {"scr_whiteflash", "0", true};
 
 //=================================================//
@@ -952,6 +959,7 @@ CL_SendCmd
 void CL_SendCmd (void)
 {
 	usercmd_t		cmd;
+	float		move_limit, move_speed;
 
 	if (cls.state != ca_connected)
 		return;
@@ -964,6 +972,21 @@ void CL_SendCmd (void)
 	// allow mice or other external controllers to add to the move
 		if (!in_disable_analog.value)
 			IN_Move (&cmd);
+
+		move_limit = sv_player->v.maxspeed;
+
+		if (waypoint_mode.value)
+			move_limit *= 1.5f;
+
+		if (in_speed.state & 1)
+			move_limit *= cl_movespeedkey.value;
+
+		move_speed = sqrtf(cmd.forwardmove * cmd.forwardmove + cmd.sidemove * cmd.sidemove);
+		if (move_limit > 0.0f && move_speed > move_limit) {
+			float scale = move_limit / move_speed;
+			cmd.forwardmove *= scale;
+			cmd.sidemove *= scale;
+		}
 
 	// send the unreliable message
 		CL_SendMove (&cmd);
@@ -1046,6 +1069,14 @@ void CL_Init (void)
 
 	Cvar_RegisterVariable (&cl_hitmarkers);
 	Cvar_RegisterVariable (&cl_colorblind);
+	Cvar_RegisterVariable (&cl_textopacity);
+	Cvar_RegisterVariable (&cl_cinematic);
+	Cvar_RegisterVariable (&vid_ultrawide_limiter);
+	Cvar_RegisterVariable (&cl_crosshairdot);
+	Cvar_RegisterVariable (&scr_serverstopwatch);
+	Cvar_RegisterVariable (&scr_playerdebuginfo);
+	Cvar_RegisterVariable (&scr_playerdebuginfo_x);
+	Cvar_RegisterVariable (&scr_playerdebuginfo_y);
 	Cvar_RegisterVariable (&scr_whiteflash);
 
 //	Cvar_RegisterVariable (&cl_autofire);
