@@ -52,7 +52,16 @@ function begin_setup()
 
 function run_nzportable()
 {
-	echo "env --chdir=${working_dir}/nzportable SDL_AUDIODRIVER=dummy LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a timeout ${TIMEOUT} wine ./${APP_BIN} -basedir ${working_dir}/nzportable -condebug -nosound -nocdaudio"
+    echo "env --chdir=${working_dir}/nzportable \
+        WINEPREFIX=${working_dir}/wineprefix \
+        SDL_AUDIODRIVER=dummy \
+        LIBGL_ALWAYS_SOFTWARE=1 \
+        xvfb-run -a timeout ${TIMEOUT} \
+        wine ./${APP_BIN} \
+        -basedir ${working_dir}/nzportable \
+        -condebug \
+        -nosound \
+        -nocdaudio"
 }
 
 function capture_path()
