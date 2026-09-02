@@ -18,7 +18,7 @@ function install_dependencies()
 	print_info "Installing Windows test dependencies.."
 	dpkg --add-architecture i386
 	apt-get update -y
-	apt-get install -y libgl1 libgl1-mesa-dri libglu1-mesa unzip wget xauth xvfb wine wine64 wine32
+	apt-get install -y ffmpeg libgl1 libgl1-mesa-dri libglu1-mesa unzip wget xauth xvfb wine wine64 wine32
 }
 
 function obtain_nzportable()
